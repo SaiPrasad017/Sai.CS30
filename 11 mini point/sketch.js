@@ -83,6 +83,6 @@ class miniPoint{
     if(this.y > height){
       this.y -= height;
     }
-
   }
+
 }
