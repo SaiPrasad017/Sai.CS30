@@ -2,16 +2,36 @@
 // Sai
 // oct 18 2024
 
-let car1;
+
+let eastbound = [];
+let westbound = [];
+
+
+//issues
+//no trucks
+//no comments
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  //let car1 = new Vehical(x,y,type,direction)
-  car1 = new Vehicle(width,random(height/2 + 20, height/2 + 200),0,0,fill(random(255),random(255),random(255)));
+  for(let i = 0; i < 20; i++){
+    eastbound.push(new Vehicle(width,random(height/2 - 20, height/2 - 200),0,0,color(random(0,255),random(0,255),random(0,255))));
+  }
+  for(let i = 0; i < 20; i++){
+    westbound.push(new Vehicle(width,random(height/2 + 20, height/2 + 200),0,1,color(random(0,255),random(0,255),random(0,255))));
+  }
+
 }
+
+
 function draw() {
   background(220);
   drawRoad();
-  car1.display(); // test value
+  for(let car of eastbound){
+    car.action();
+  }
+  for(let car of westbound){
+    car.action();
+  }
 }
 
 function drawRoad(){
@@ -30,31 +50,33 @@ function drawRoad(){
 class Vehicle{
   constructor(x,y,type,d,c){
     this.type = type;
-    this.xs = 5; // speed
+    this.xs = 1; // speed
     this.x = x;
     this.y = y;
     this.d = d; // direction
+    this.chance;
     this.c = c; // color
   }
 
   drawCar(){
     rectMode(CENTER);
-    rect(this.x, this.y, 100, 50);
+    fill(this.c);
+    rect(this.x, this.y, 50, 25);
     //change cars size if needed
     //wheels
-    fill(this.c);
-    rect(this.x - 25, this.y - 10, 25, 15);
-    rect(this.x - 25, this.y + 10, 25, 15);
-    rect(this.x + 25, this.y + 10, 25, 15);
-    rect(this.x + 25, this.y - 10, 25, 15);
+    fill(255);
+    rect(this.x - 20, this.y - 15, 10, 6);
+    rect(this.x - 20, this.y + 15, 10, 6);
+    rect(this.x + 20, this.y + 15, 10, 6);
+    rect(this.x + 20, this.y - 15, 10, 6);
   }
 
 
   drawTruck(){
     rectMode(CENTER);
     fill(this.c);
-    rect(this.x, this.y, 200, 150);
-    rect(this.x + 100, this.y, 50, 150);
+    rect(this.x, this.y, 80, 50);
+    rect(this.x + 40, this.y, 25, 50);
   }
   
   display(){
@@ -68,7 +90,7 @@ class Vehicle{
 
   
   move(){
-    if(this.d === 0){
+    if(this.d === 1){
       this.x = this.x - this.xs;
     }
     else{
@@ -88,7 +110,7 @@ class Vehicle{
   speedUp(){
     if(this.d === 0){
       if(this.xs >= 15){
-        this.xs - 5;
+        this.xs - 1;
       }
       else{
         this.xs = this.xs + 15;
@@ -96,7 +118,7 @@ class Vehicle{
     }
     else{
       if(this.xs <= 15){ 
-        this.xs + 5;
+        this.xs + 1;
       }
       else{
         this.xs = this.xs - 15;
@@ -108,7 +130,7 @@ class Vehicle{
   speedDown(){
     if(this.d === 0){
       if(this.xs <= 15){
-        this.xs + 5;
+        this.xs + 1;
       }
       else{
         this.xs = this.xs - 15; //do we need =
@@ -116,13 +138,39 @@ class Vehicle{
     }
     else{
       if(this.xs >= 15){ 
-        this.xs - 5;
+        this.xs - 1;
       }
       else{
         this.xs = this.xs + 15;
       }
     }
   }
+
+  changeColor(){
+    this.c = color(random(0,255),random(0,255),random(0,255));
+  }
+
+
+
+
+
+
+  action(){
+    this.display();
+    this.move();
+    this.chance = int(random(0,100));
+    if(this.chance === 1){
+      this.speedUp();
+    }
+    if(this.chance === 2){
+      this.speedDown();
+    }
+    if(this.chance === 3){
+      this.changeColor();
+    }
+  }
+
+
 
 }
 
