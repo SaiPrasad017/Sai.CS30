@@ -2,43 +2,54 @@
 // Sai
 // oct 18 2024
 
-
+//setting local varibles
 let eastbound = [];
 let westbound = [];
 
-
-//issues
-//no trucks
 //no comments
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  for(let i = 0; i < 20; i++){
-    eastbound.push(new Vehicle(width,random(height/2 - 20, height/2 - 200),0,0,color(random(0,255),random(0,255),random(0,255))));
-  }
-  for(let i = 0; i < 20; i++){
-    westbound.push(new Vehicle(width,random(height/2 + 20, height/2 + 200),0,1,color(random(0,255),random(0,255),random(0,255))));
-  }
-
+  // adding car to the top
+  // for(let i = 0; i < 20; i++){
+  //   eastbound.push(new Vehicle(width,random(height/2 - 20, height/2 - 200),int(random(0,2)),0,color(random(0,255),random(0,255),random(0,255))));
+  // }
+  // //adding cars to the bottem
+  // for(let i = 0; i < 20; i++){
+  //   westbound.push(new Vehicle(width,random(height/2 + 20, height/2 + 200),int(random(0,2)),1,color(random(0,255),random(0,255),random(0,255))));
+  // }
 }
 
 
 function draw() {
   background(220);
+  //drawing the road
   drawRoad();
+  //drawing the cars
   for(let car of eastbound){
     car.action();
   }
   for(let car of westbound){
     car.action();
   }
+
+  if(mousePressed &! keyCode === 16 ){
+    eastbound.push(new Vehicle(width,random(height/2 - 20, height/2 - 200),int(random(0,2)),0,color(random(0,255),random(0,255),random(0,255))));
+  }
+  if(mousePressed & keyCode === 16 ){
+    westbound.push(new Vehicle(width,random(height/2 + 20, height/2 + 200),int(random(0,2)),1,color(random(0,255),random(0,255),random(0,255))));
+  }
+  
 }
+
 
 function drawRoad(){
   let lineSpace = 75;
+  //drawing the main road
   fill(25);
   rectMode(CENTER);
   rect(width/2,height/2,windowWidth,500);
+  //drawing the white lines
   fill(255);
   rectMode(CORNER);
   for(let w = 0; w < width; w += lineSpace){
@@ -49,20 +60,20 @@ function drawRoad(){
 
 class Vehicle{
   constructor(x,y,type,d,c){
-    this.type = type;
+    this.type = type; // type of car
     this.xs = 1; // speed
-    this.x = x;
-    this.y = y;
+    this.x = x;  //x position
+    this.y = y;  // y position
     this.d = d; // direction
     this.chance;
     this.c = c; // color
   }
 
   drawCar(){
+    //drawing body of car
     rectMode(CENTER);
     fill(this.c);
     rect(this.x, this.y, 50, 25);
-    //change cars size if needed
     //wheels
     fill(255);
     rect(this.x - 20, this.y - 15, 10, 6);
@@ -80,6 +91,7 @@ class Vehicle{
   }
   
   display(){
+    //picking the type of car
     if(this.type === 0){
       this.drawCar();
     }
@@ -90,14 +102,15 @@ class Vehicle{
 
   
   move(){
+    //moving the car
     if(this.d === 1){
-      this.x = this.x - this.xs;
+      this.x = this.x - (this.xs + int(random(1,5)));
     }
     else{
-      this.x = this.x + this.xs;
+      this.x = this.x + (this.xs + int(random(1,5)));
     }
     
-
+    //wrap around code
     if(this.x < 0){
       this.x += width;
     }
@@ -108,6 +121,7 @@ class Vehicle{
 
   
   speedUp(){
+
     if(this.d === 0){
       if(this.xs >= 15){
         this.xs - 1;
@@ -128,15 +142,18 @@ class Vehicle{
 
 
   speedDown(){
+    //cars on top
     if(this.d === 0){
       if(this.xs <= 15){
         this.xs + 1;
       }
       else{
-        this.xs = this.xs - 15; //do we need =
+        this.xs = this.xs - 15;
       }
     }
+
     else{
+      //cars on bottem
       if(this.xs >= 15){ 
         this.xs - 1;
       }
@@ -150,27 +167,23 @@ class Vehicle{
     this.c = color(random(0,255),random(0,255),random(0,255));
   }
 
-
-
-
-
-
   action(){
+    //how the car functions
     this.display();
     this.move();
     this.chance = int(random(0,100));
+    //fast
     if(this.chance === 1){
       this.speedUp();
     }
+    //slow
     if(this.chance === 2){
       this.speedDown();
     }
+    //color
     if(this.chance === 3){
       this.changeColor();
     }
   }
-
-
-
 }
 
