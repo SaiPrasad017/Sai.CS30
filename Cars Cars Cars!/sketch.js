@@ -10,14 +10,14 @@ let westbound = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  // adding car to the top
-  // for(let i = 0; i < 20; i++){
-  //   eastbound.push(new Vehicle(width,random(height/2 - 20, height/2 - 200),int(random(0,2)),0,color(random(0,255),random(0,255),random(0,255))));
-  // }
-  // //adding cars to the bottem
-  // for(let i = 0; i < 20; i++){
-  //   westbound.push(new Vehicle(width,random(height/2 + 20, height/2 + 200),int(random(0,2)),1,color(random(0,255),random(0,255),random(0,255))));
-  // }
+  //adding car to the top
+  for(let i = 0; i < 20; i++){
+    eastbound.push(new Vehicle(width,random(height/2 - 20, height/2 - 200),int(random(0,2)),0,color(random(0,255),random(0,255),random(0,255))));
+  }
+  //adding cars to the bottem
+  for(let i = 0; i < 20; i++){
+    westbound.push(new Vehicle(width,random(height/2 + 20, height/2 + 200),int(random(0,2)),1,color(random(0,255),random(0,255),random(0,255))));
+  }
 }
 
 
@@ -32,14 +32,6 @@ function draw() {
   for(let car of westbound){
     car.action();
   }
-
-  if(mousePressed &! keyCode === 16 ){
-    eastbound.push(new Vehicle(width,random(height/2 - 20, height/2 - 200),int(random(0,2)),0,color(random(0,255),random(0,255),random(0,255))));
-  }
-  if(mousePressed & keyCode === 16 ){
-    westbound.push(new Vehicle(width,random(height/2 + 20, height/2 + 200),int(random(0,2)),1,color(random(0,255),random(0,255),random(0,255))));
-  }
-  
 }
 
 
@@ -57,6 +49,14 @@ function drawRoad(){
   }
 }
 
+function mouseClicked(){
+  if(keyIsPressed && keyCode === SHIFT){
+    eastbound.push(new Vehicle(width,random(height/2 - 20, height/2 - 200),int(random(0,2)),0,color(random(0,255),random(0,255),random(0,255))));
+  }
+  else{
+    westbound.push(new Vehicle(width,random(height/2 + 20, height/2 + 200),int(random(0,2)),1,color(random(0,255),random(0,255),random(0,255))));
+  }
+}
 
 class Vehicle{
   constructor(x,y,type,d,c){
@@ -67,6 +67,8 @@ class Vehicle{
     this.d = d; // direction
     this.chance;
     this.c = c; // color
+    this.trafficLight = 0;
+    this.f = frameCount;
   }
 
   drawCar(){
@@ -102,12 +104,14 @@ class Vehicle{
 
   
   move(){
-    //moving the car
-    if(this.d === 1){
-      this.x = this.x - (this.xs + int(random(1,5)));
-    }
-    else{
-      this.x = this.x + (this.xs + int(random(1,5)));
+    if(this.t === 0){
+      //moving the car
+      if(this.d === 1){
+        this.x = this.x - (this.xs + int(random(1,5)));
+      }
+      else{
+        this.x = this.x + (this.xs + int(random(1,5)));
+      }
     }
     
     //wrap around code
@@ -167,6 +171,7 @@ class Vehicle{
     this.c = color(random(0,255),random(0,255),random(0,255));
   }
 
+
   action(){
     //how the car functions
     this.display();
@@ -183,6 +188,13 @@ class Vehicle{
     //color
     if(this.chance === 3){
       this.changeColor();
+    }
+    if(this.f === 150){
+      this.trafficLight = 1;
+      this.f = 0;
+      if(this.f === 120){
+        this.trafficLight = 0;
+      }
     }
   }
 }
