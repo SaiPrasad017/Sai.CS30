@@ -67,8 +67,8 @@ class Vehicle{
     this.d = d; // direction
     this.chance;
     this.c = c; // color
-    this.trafficLight = 0;
-    this.f = frameCount;
+    // this.trafficLight = 0;
+    // this.f = frameCount;
   }
 
   drawCar(){
@@ -104,15 +104,15 @@ class Vehicle{
 
   
   move(){
-    if(this.t === 0){
-      //moving the car
-      if(this.d === 1){
-        this.x = this.x - (this.xs + int(random(1,5)));
-      }
-      else{
-        this.x = this.x + (this.xs + int(random(1,5)));
-      }
+    // if(this.t === 0){
+    //moving the car
+    if(this.d === 1){
+      this.x = this.x - (this.xs + int(random(1,5)));
     }
+    else{
+      this.x = this.x + (this.xs + int(random(1,5)));
+    }
+    // }
     
     //wrap around code
     if(this.x < 0){
@@ -189,13 +189,14 @@ class Vehicle{
     if(this.chance === 3){
       this.changeColor();
     }
-    if(this.f === 150){
-      this.trafficLight = 1;
-      this.f = 0;
-      if(this.f === 120){
-        this.trafficLight = 0;
-      }
-    }
+  //   if(frameCount === 150){
+  //     this.trafficLight = 1;
+  //     this.f = frameCount - frameCount;
+  //     if(frameCount === 120){
+  //       this.trafficLight = 0;
+  //       this.f = frameCount - frameCount;
+  //     }
+  //   }
   }
 }
 
