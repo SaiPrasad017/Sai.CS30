@@ -7,6 +7,7 @@ let NUM_ROWS = 4;
 let NUM_COLS = 5;
 let winCount = 0;
 let rectWidth, rectHeight;
+let spaceCount = 0;
 let currentRow, currentCol;
 let gridData = [[0,0,0,0,0],
                 [0,0,0,0,0],
@@ -27,6 +28,7 @@ function draw() {
   background(220);
   determineActiveSquare(); //figure out which tile the mouse cursor is over
   drawGrid();         //render the current game board to the screen (and the overlay)
+  overlay();
   win(); //check if your winning            
 }
 
@@ -34,15 +36,23 @@ function mousePressed(){
   // cross-shaped pattern flips on a mouseclick. Boundary conditions are checked within the flip function to ensure in-bounds access for array
   if(keyIsPressed && keyCode === 16){
     //flips a single square
-    flip(currentCol, currentRow);
+    flip(currentCol, currentRow)
   }
   else{
-    //creates the cross shaped pattern
-    flip(currentCol, currentRow);
-    flip(currentCol-1, currentRow);
-    flip(currentCol+1, currentRow);
-    flip(currentCol, currentRow-1);
-    flip(currentCol, currentRow+1);
+    if (spaceCount === 0){
+      //creates the cross shaped pattern
+      flip(currentCol, currentRow);
+      flip(currentCol-1, currentRow);
+      flip(currentCol+1, currentRow);
+      flip(currentCol, currentRow-1);
+      flip(currentCol, currentRow+1);
+    }
+    else{
+      flip(currentCol, currentRow);
+      flip(currentCol-1, currentRow);
+      flip(currentCol, currentRow+1);
+      flip(currentCol -1, currentRow+1);
+    }
   }
 }
 
@@ -127,4 +137,39 @@ function win(){
     fill(255,0,12);
     text('you win',windowWidth/2,windowHeight/2);
   }
+}
+
+function keyReleased() {
+  if (keyCode === 32) {
+    if(spaceCount === 0){
+      spaceCount = 1;
+      return spaceCount;
+    }
+    else{
+      spaceCount = 0;
+      return spaceCount;
+    }
+  }
+}
+
+
+function overlay(){
+  fill(0,255,0,100);
+  if(keyIsPressed && keyCode === 16){
+    rect(currentCol*rectWidth, currentRow*rectHeight, rectWidth, rectHeight);
+  }
+  else if(spaceCount === 0){
+    rect(currentCol*rectWidth, currentRow*rectHeight, rectWidth, rectHeight);
+    rect((currentCol-1)*rectWidth, currentRow*rectHeight, rectWidth, rectHeight);
+    rect((currentCol+1)*rectWidth, currentRow*rectHeight, rectWidth, rectHeight);
+    rect(currentCol*rectWidth, (currentRow-1)*rectHeight, rectWidth, rectHeight);
+    rect(currentCol*rectWidth, (currentRow+1)*rectHeight, rectWidth, rectHeight);
+  }
+  else if(spaceCount === 1){
+    rect(currentCol*rectWidth, currentRow*rectHeight, rectWidth, rectHeight);
+    rect((currentCol-1)*rectWidth, currentRow*rectHeight, rectWidth, rectHeight);
+    rect(currentCol*rectWidth, (currentRow+1)*rectHeight, rectWidth, rectHeight);
+    rect((currentCol- 1) *rectWidth, (currentRow+1)*rectHeight, rectWidth, rectHeight);
+  }
+  
 }
